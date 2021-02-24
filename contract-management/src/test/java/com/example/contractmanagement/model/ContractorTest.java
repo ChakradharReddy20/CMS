@@ -2,6 +2,11 @@ package com.example.contractmanagement.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import lombok.extern.slf4j.Slf4j;
@@ -40,5 +45,7 @@ class ContractorTest {
 		String tostring="Contractor(id=1, name=contractor, password=contractor)";
 		assertEquals(contractor.toString(), tostring);
 	}
+	
+	 
 
 }

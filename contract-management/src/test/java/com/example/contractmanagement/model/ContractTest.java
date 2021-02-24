@@ -2,15 +2,21 @@ package com.example.contractmanagement.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import lombok.extern.slf4j.Slf4j;
+import java.util.Set;
 
-@Slf4j
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
 class ContractTest {
 
 	Contract contract = new Contract();
+	private Validator validator;
 	@Test
 	void testId() {
 		contract.setId(1);
@@ -40,15 +46,7 @@ class ContractTest {
 		assertEquals(contract.getStatus(), "dummy status");
 	}
 	
-	@Test
-	void testAminites() {
-		Amenities amenities = new Amenities();
-		amenities.setId(1);
-		amenities.setAminity("Amenities1, Amenities2");
-		amenities.setContract(null);
-		contract.setAmenities(amenities);
-		assertEquals(contract.getAmenities(),amenities);
-	}
+
 	
 	@Test
 	void testSupplier() {
@@ -60,16 +58,40 @@ class ContractTest {
 		Supplier supplier = new Supplier();
 		supplier.setId(1);
 		contract.setSupplier(supplier);
-		
-		Amenities amenities = new Amenities();
-		amenities.setId(1);
-		amenities.setAminity("Amenities1, Amenities2");
-		amenities.setContract(null);
-		contract.setAmenities(amenities);
-		log.info(contract.toString());
-		String tostring="Contract [id=1, contractType=Some Text, contractDuration=1, termsAndConditions=Some Text, supplier=1, status=dummy status, amenities=Amenities [id=1, aminity=Amenities1, Amenities2]]";
+
+		String tostring="Contract [id=1, contractType=Some Text, contractDuration=1, termsAndConditions=Some Text, supplier=1, status=dummy status]";
 		assertEquals(contract.toString(), tostring);
 	}
+	
+	 @BeforeEach
+	    public void setUp() {
+	        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+	        validator = factory.getValidator();
+	    }
+	@Test
+	void testContractTypeLength() {
+		String ctype="";
+		for (int i = 0; i<=600; i++)
+			ctype = ctype+"a";
+		contract.setContractType(ctype);
+		contract.setTermsAndConditions(ctype);
+		Set<ConstraintViolation<Contract>> violations = validator.validate(contract);
+		assertFalse(violations.isEmpty());
+	}
 
+	 @BeforeEach
+	    public void anothersetUp() {
+	        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+	        validator = factory.getValidator();
+	    }
+	@Test
+	void anothertestContractTypeLength() {
+		String ctype="";
+		
+		contract.setContractType(ctype);
+		contract.setTermsAndConditions(ctype);
+		Set<ConstraintViolation<Contract>> violations = validator.validate(contract);
+		assertFalse(violations.isEmpty());
+	}
 	
 }

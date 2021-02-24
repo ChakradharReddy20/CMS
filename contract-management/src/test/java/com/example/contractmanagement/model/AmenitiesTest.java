@@ -2,11 +2,20 @@ package com.example.contractmanagement.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class AmenitiesTest {
 
 	Amenities amenities = new Amenities();
+	private Validator validator;
 	@Test
 	void testId() {
 		amenities.setId(1);
@@ -38,5 +47,21 @@ class AmenitiesTest {
 		amenities.setContract(contract);
 		
 		assertEquals(amenities.getContract(), contract);
+	}
+	
+	@BeforeEach
+    void setUp() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
+	
+	@Test
+	void testValidations() {
+		String ctype="";
+		for (int i = 0; i<=600; i++)
+			ctype = ctype+"a";
+		amenities.setAminity(ctype);
+		Set<ConstraintViolation<Amenities>> violations = validator.validate(amenities);
+		assertFalse(violations.isEmpty());
 	}
 }

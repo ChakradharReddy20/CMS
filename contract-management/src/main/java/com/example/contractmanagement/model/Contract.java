@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import lombok.Getter;
@@ -29,14 +31,14 @@ public class Contract {
 	private Integer id;
 	
 	@Column(name ="ContractType", length = 500)
-	@Size(max = 500, message = "Contract Type must not have more than 500 characters")
+	@Size(min = 1, max = 500, message = "Contract Type must not be empty and have more than 500 characters")
 	private String contractType;
 	
 	@Column(name="ConractDuration")
 	private Integer contractDuration; 
 	
 	@Column(name ="TermsAndConditions", length = 500)
-	@Size(max = 500, message = "Contract Type must not have more than 500 characters")
+	@Size(min = 1, max = 500, message = "Contract Type must not be empty and not have more than 500 characters")
 	private String termsAndConditions;
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -45,18 +47,10 @@ public class Contract {
 
 	@Column(name="Status", length=20)
 	private String status;
-	
-	@OneToOne(mappedBy="contract")
-	private Amenities amenities;
 
 	@Override
 	public String toString() {
 		return "Contract [id=" + id + ", contractType=" + contractType + ", contractDuration=" + contractDuration
-				+ ", termsAndConditions=" + termsAndConditions + ", supplier=" + supplier.getId() + ", status=" + status
-				+ ", amenities=" + amenities.toString() + "]";
+				+ ", termsAndConditions=" + termsAndConditions + ", supplier=" + supplier.getId() + ", status=" + status + "]";
 	}
-
-	
-	
-	
 }
